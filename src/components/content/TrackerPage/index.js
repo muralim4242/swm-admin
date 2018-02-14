@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { translate, Trans } from "react-i18next";
-import OrderInfo from "./OrderInfo";
 import MapsInfo from "./MapInfo";
 import Page_404 from "../ErrorPages/404";
 import NoInternet from "../ErrorPages/NoInternet";
@@ -9,7 +8,119 @@ import _ from "lodash";
 import Loader from "../Loader";
 import $ from "jquery";
 
-var appData = {"visitId":{"clientId":"bigbasket","taskId":"BB-Order-14363675","visitId":"customer_delivery"},"userName":"10  AP35 Y 8521VSP","userNumber":"","userPhotoUrl":"","userLocation":{"address":null,"latLng":{"lat":17.73779,"lng":83.3049602,"accuracy":0}},"vehicleIconUrl":"https://s3.amazonaws.com/locus-assets/vehicle-icons/Car1.svg","source":{"address":"UTPL Campus, Warehouse No.1, survey no.35,38,39, IDA Block A, Mindi Village, Gajuwaka, Visakhapatnam 530012","latLng":{"lat":17.70080106712,"lng":83.213237792356,"accuracy":0}},"destination":{"address":"6-3-1  Ramalayam Veedhi, Old Gajuwaka lbs nagar ramalayam veedhi Visakhapatnam 530026","latLng":{"lat":17.68660398505811,"lng":83.20296529632571,"accuracy":0}},"orderDetail":{"lineItems":[],"transactionDetail":null},"amount":null,"customerName":null,"tripId":"12323","eta":"2016-08-21T19:58:34.272+0000","pin":null,"status":{"status":"CANCELLED","triggeredOn":"2016-08-21T21:27:22.273+0000"},"enrouteOrders":[],"showLocationTrail":false,"settings":{"logo":"https://s3.amazonaws.com/locus-client-assets/bigbasket/logo.png","lightBackgroundLogo":null,"favicon":null,"displayName":"BigBasket","title":null,"shouldDisplayName":true,"websiteUrl":"http://www.bigbasket.com/","androidAppLink":null,"iosAppLink":null,"callSupportDisplayText":"CallDeliveryPerson","callSupportNumber":null},"vehicleType":"NONE"}
+var appData = {
+  userLocation:{
+    address: null,
+    latLng: { lat: 12.9226, lng: 77.6174, accuracy: 0 }
+  },
+  vehicleLocations:
+  [
+    {
+      address: null,
+      latLng: { lat: 12.9226, lng: 77.6174, accuracy: 0 }
+    },
+    {
+      address: null,
+      latLng: { lat: 12.9230, lng: 77.6178, accuracy: 0 }
+    },
+    {
+      address: null,
+      latLng: { lat: 12.9234, lng: 77.6182, accuracy: 0 }
+    },
+    {
+      address: null,
+      latLng: { lat: 12.9238, lng: 77.6186, accuracy: 0 }
+    }
+  ],
+  vehicleIconUrl:
+    "https://s3.amazonaws.com/locus-assets/vehicle-icons/Car1.svg",
+  source: {
+    address:
+      "UTPL Campus, Warehouse No.1, survey no.35,38,39, IDA Block A, Mindi Village, Gajuwaka, Visakhapatnam 530012",
+    latLng: { lat: 17.70080106712, lng: 83.213237792356, accuracy: 0 }
+  },
+  destination: {
+    address:
+      "6-3-1  Ramalayam Veedhi, Old Gajuwaka lbs nagar ramalayam veedhi Visakhapatnam 530026",
+    latLng: { lat: 17.68660398505811, lng: 83.20296529632571, accuracy: 0 }
+  },
+  eta: "2016-08-21T19:58:34.272+0000",
+  vehicleType: "TRUCK",
+  routes: [
+    {
+      dumpingGround: {
+        latitude: 12.9234,
+        longitude: 77.634,
+        latitudeDelta: 0.0922,
+        longitudeDelta: 0.0421,
+        title: "Dumping ground 1",
+        description: "Test dumping ground"
+      },
+      collectionPoints: [
+        {
+          latitude: 12.9226,
+          longitude: 77.6174,
+          latitudeDelta: 0.0922,
+          longitudeDelta: 0.0421,
+          title: "Collection point 1",
+          description: "Test collection points"
+        },
+        {
+          latitude: 12.9592,
+          longitude: 77.6974,
+          latitudeDelta: 0.0922,
+          longitudeDelta: 0.0421,
+          title: "Collection point 2",
+          description: "Test collection points"
+        },
+        {
+          latitude: 12.924,
+          longitude: 77.6651,
+          latitudeDelta: 0.0922,
+          longitudeDelta: 0.0421,
+          title: "Collection point 3",
+          description: "Test collection points"
+        }
+      ]
+    },
+    {
+      dumpingGround: {
+        latitude: 12.9236,
+        longitude: 77.636,
+        latitudeDelta: 0.0922,
+        longitudeDelta: 0.0421,
+        title: "Dumping ground 1",
+        description: "Test dumping ground"
+      },
+      collectionPoints: [
+        {
+          latitude: 12.9228,
+          longitude: 77.6176,
+          latitudeDelta: 0.0922,
+          longitudeDelta: 0.0421,
+          title: "Collection point 1",
+          description: "Test collection points"
+        },
+        {
+          latitude: 12.9594,
+          longitude: 77.6976,
+          latitudeDelta: 0.0922,
+          longitudeDelta: 0.0421,
+          title: "Collection point 2",
+          description: "Test collection points"
+        },
+        {
+          latitude: 12.926,
+          longitude: 77.6653,
+          latitudeDelta: 0.0922,
+          longitudeDelta: 0.0421,
+          title: "Collection point 3",
+          description: "Test collection points"
+        }
+      ]
+    }
+  ]
+};
 
 var timerObject;
 
@@ -95,8 +206,8 @@ class Tracker extends Component {
       });
 
     self.setState({
-			...state,
-			appData: appData,
+      ...state,
+      appData: appData,
       isValidId: true,
       isLoading: false
     });

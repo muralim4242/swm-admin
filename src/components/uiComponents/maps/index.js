@@ -4,6 +4,8 @@ import carIcon from '../../../assets/images/car.svg';
 
 import truckIcon from '../../../assets/images/truck.png';
 
+import garbagePickup from '../../../assets/images/garbage-pickup.png';
+
 
 import pickup from '../../../assets/images/pickup/pickup.png';
 import pickup2x from '../../../assets/images/pickup/pickup@2x.png';
@@ -159,14 +161,34 @@ export const MapWithDirectionsRenderer = compose(
           ]}
         }
       >
-        {props.pickupDirections && <Marker
-          position={{ lat: props.source.latLng.lat, lng: props.source.latLng.lng }}
-          icon={{
-            url: (props.availWidth < 479 ? pickup : pickup2x),
-            scaledSize: (props.availWidth < 479 ? new window.google.maps.Size(24, 24) : new window.google.maps.Size(32, 32)),
-            anchor: (props.availWidth < 479 ? new window.google.maps.Point(15, 15) : new window.google.maps.Point(15, 15))
-          }}
-        />}
+        {props.routes && props.routes.map((route,routeKey)=>
+          {
+            return route.collectionPoints.map((marker,markerKey)=>
+              <Marker
+              key={markerKey}
+              position={{ lat: marker.latitude, lng: marker.longitude }}
+              icon={{
+                url: (props.availWidth < 479 ? garbagePickup : garbagePickup),
+                scaledSize: (props.availWidth < 479 ? new window.google.maps.Size(24, 24) : new window.google.maps.Size(32, 32)),
+                anchor: (props.availWidth < 479 ? new window.google.maps.Point(15, 15) : new window.google.maps.Point(15, 15))
+              }}
+             />
+            )
+          })
+        }
+
+        {props.routes && props.routes.map((route,routeKey)=>
+            (<Marker
+              key={routeKey}
+              position={{ lat: route.dumpingGround.latitude, lng: route.dumpingGround.longitude }}
+              // icon={{
+              //   url: (props.availWidth < 479 ? garbagePickup : garbagePickup),
+              //   scaledSize: (props.availWidth < 479 ? new window.google.maps.Size(24, 24) : new window.google.maps.Size(32, 32)),
+              //   anchor: (props.availWidth < 479 ? new window.google.maps.Point(15, 15) : new window.google.maps.Point(15, 15))
+              // }}
+             />)
+          )
+        }
 
         {props.showLocationTrail && props.directions && ["COMPLETED", "CANCELLED"].indexOf(props.tripStatus) == -1 && <DirectionsRenderer
                                 directions={props.directions}
@@ -187,10 +209,12 @@ export const MapWithDirectionsRenderer = compose(
                                     }]
                                   }
                                 }}/>}
-        <Marker
+        {props.vehicleLocations && props.vehicleLocations.map((marker,markerKey)=>(
+          <Marker
+          key={markerKey}
           position={{
-            lat: props.tripStatus == "COMPLETED" ? props.destination.latLng.lat : props.tripStatus == "CANCELLED" ? props.source.latLng.lat : props.userLocation.latLng.lat,
-            lng: props.tripStatus == "COMPLETED" ? props.destination.latLng.lng : props.tripStatus == "CANCELLED" ? props.source.latLng.lng : props.userLocation.latLng.lng
+            lat: marker.latLng.lat,
+            lng: marker.latLng.lng
           }}
           icon={{
             url: props.icon || truckIcon,
@@ -207,10 +231,14 @@ export const MapWithDirectionsRenderer = compose(
             anchor: (props.tripStatus == "COMPLETED" || props.tripStatus == "CANCELLED") ? new window.google.maps.Point(-20, 25) : new window.google.maps.Point(10, 25)
           }}
           options={{animation: window.google.maps.Animation.DROP}}
-        >
+         >
+         </Marker>
+        ))
 
-        </Marker>
-        <MarkerWithLabel
+      }
+
+
+        {/*<MarkerWithLabel
           position={{ lat: props.destination.latLng.lat, lng: props.destination.latLng.lng }}
           labelAnchor={new window.google.maps.Point(0, 0)}
           labelStyle={{"boxShadow": "0px 0px 5px 0px rgba(0,0,0,0.43)"}}
@@ -226,7 +254,7 @@ export const MapWithDirectionsRenderer = compose(
               <div style={{"fontSize": "8px", "marginLeft": "2px"}}>MIN <br/> ETA</div>
             </div> :
             <div className="d-box">{props.dNearByLabel}</div> : <div></div>}
-        </MarkerWithLabel>
+        </MarkerWithLabel>*/}
 
         {
           props.waypoints && props.waypoints.length
@@ -283,8 +311,11 @@ export const MapWithDirectionsRenderer = compose(
           <Marker
             position={{ lat: 12.969158, lng: 77.600947 }}
             icon={{
-              path: car,
-              scale: 1,
+              url: props.icon || truckIcon,
+              scaledSize: new window.google.maps.Size(40, 35), // scaled size
+              // origin: new window.google.maps.Point(0, -10),
+              // path: car,
+              // scale: .7,
               strokeColor: 'white',
               strokeWeight: .10,
               fillOpacity: 1,

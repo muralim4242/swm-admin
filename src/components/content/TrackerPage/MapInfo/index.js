@@ -10,12 +10,10 @@ class MapsInfo extends Component {
 		this.state = {
 			source: null,
 			destination: null,
-			userLocation: null,
-			eta: -1,
-			tripStatus: "",
-			dNearBy: false,
-			enrouteOrders: null,
-			showLocationTrail: false
+			vehicleLocations: [],
+			userLocation:{},
+			eta: 9,
+			routes:[]
 		};
 	}
 
@@ -25,16 +23,13 @@ class MapsInfo extends Component {
 	}
 
 	initializeMap(props) {
-		if(props.source && props.destination && props.userLocation) {
+		if(props.source && props.destination && props.vehicleLocations) {
 			this.setState({
 				source: props.source,
 				destination: props.destination,
-				userLocation: props.userLocation,
-				eta: props.eta ? moment(props.eta).valueOf() - new Date().getTime() : -1,
-				showLocationTrail: props.showLocationTrail || false,
-				tripStatus: props.status.status,
-				dNearBy: props.enrouteOrders && props.enrouteOrders.length,
-				enrouteOrders: props.enrouteOrders
+				vehicleLocations: props.vehicleLocations,
+				routes: props.routes,
+				userLocation:props.userLocation
 			})
 		}
 	}
@@ -46,25 +41,22 @@ class MapsInfo extends Component {
 	}
 
 	render() {
-		const { source, destination, userLocation, enrouteOrders, eta, tripStatus, dNearBy, showLocationTrail } = this.state;
+		const { source, destination, vehicleLocations, eta,routes,userLocation } = this.state;
 		const { refresh, t, availWidth } = this.props;
 		return (
 			<div className="map-box">
 				<a className="refresh-btn btn-floating btn-large waves-effect waves-light lightBlack" href="javascript:void(0)" onClick={refresh}>
 					<i className="material-icons">refresh</i>
 				</a>
-				<MapWithDirectionsRenderer 
+				<MapWithDirectionsRenderer
 					availWidth={availWidth}
-					source={source} 
-					destination={destination} 
-					userLocation={userLocation} 
-					showLocationTrail={showLocationTrail} 
-					yetToStartLabel={t('trackingYetToStart')} 
+					source={source}
+					destination={destination}
+					vehicleLocations={vehicleLocations}
 					eta={eta}
-					tripStatus={tripStatus}
-					dNearBy={dNearBy}
-					enrouteOrders={enrouteOrders}
-					dNearByLabel={t('deliveringOrdersNearBy')}/>
+					routes={routes}
+					userLocation={userLocation}
+				/>
 			</div>
 		);
 	}
