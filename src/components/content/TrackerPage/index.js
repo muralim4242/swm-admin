@@ -224,12 +224,12 @@ class Tracker extends Component {
     //     // });
     //   });
     //
-    // self.setState({
-    //   ...state,
-    //   appData: appData,
-    //   isValidId: true,
-    //   isLoading: false
-    // });
+    self.setState({
+      ...state,
+      appData: appData,
+      isValidId: true,
+      isLoading: false
+    });
   };
 
   render() {
