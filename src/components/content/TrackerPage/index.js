@@ -7,6 +7,13 @@ import { commonApi } from "../../../utility/api";
 import _ from "lodash";
 import Loader from "../Loader";
 import $ from "jquery";
+import jp from "jsonpath";
+import {
+  SocketProvider,
+  socketConnect
+} from 'socket.io-react';
+import io from 'socket.io-client';
+const SOCKET_URL = "ws://172.16.4.128:3005/location";
 
 var appData = {
   userLocation:{
@@ -176,41 +183,53 @@ class Tracker extends Component {
   initialize = () => {
     let self = this;
     let { state } = self;
-    commonApi(
-      "get",
-      "https://api.locus.sh/v1/trip/" + self.props.match.params.uid + "/info"
-    )
-      .then(res => {
-        if (res.data && res.data.settings) {
-          if (res.data.settings.title)
-            window.document.title = res.data.settings.title;
-          if (res.data.settings.favicon)
-            $("link[rel='shortcut icon']").attr(
-              "href",
-              res.data.settings.favicon
-            );
-        }
-        self.setState({
-          ...state,
-          isValidId: res.data && Object.keys(res.data).length,
-          appData: res.data && Object.keys(res.data).length ? res.data : {},
-          isLoading: false
-        });
-      })
-      .catch(err => {
-        console.log(err);
-        // self.setState({
-        //   isValidId: false,
-        //   isLoading: false
-        // });
-      });
+    const socket = io.connect(SOCKET_URL);
+    socket.on('customer_list', (msg) => {
+      console.log(msg);
+      var lat = jp.query(msg, '$..[2]');
+      var long = jp.query(msg, '$..[2]');
+      // (msg).forEach(item => {
 
-    self.setState({
-      ...state,
-      appData: appData,
-      isValidId: true,
-      isLoading: false
+      // });
+      console.log(lat);
+      console.log(long);
+
     });
+    // commonApi(
+    //   "get",
+    //   "https://api.locus.sh/v1/trip/" + self.props.match.params.uid + "/info"
+    // )
+    //   .then(res => {
+    //     if (res.data && res.data.settings) {
+    //       if (res.data.settings.title)
+    //         window.document.title = res.data.settings.title;
+    //       if (res.data.settings.favicon)
+    //         $("link[rel='shortcut icon']").attr(
+    //           "href",
+    //           res.data.settings.favicon
+    //         );
+    //     }
+    //     self.setState({
+    //       ...state,
+    //       isValidId: res.data && Object.keys(res.data).length,
+    //       appData: res.data && Object.keys(res.data).length ? res.data : {},
+    //       isLoading: false
+    //     });
+    //   })
+    //   .catch(err => {
+    //     console.log(err);
+    //     // self.setState({
+    //     //   isValidId: false,
+    //     //   isLoading: false
+    //     // });
+    //   });
+    //
+    // self.setState({
+    //   ...state,
+    //   appData: appData,
+    //   isValidId: true,
+    //   isLoading: false
+    // });
   };
 
   render() {

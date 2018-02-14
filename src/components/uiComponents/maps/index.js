@@ -15,7 +15,7 @@ import drop from '../../../assets/images/drop/drop.png';
 import drop2x from '../../../assets/images/drop/drop@2x.png';
 import drop3x from '../../../assets/images/drop/drop@3x.png';
 
-const { compose, withProps, lifecycle } = require("recompose");
+const { compose, withProps, lifecycle ,withStateHandlers} = require("recompose");
 const {
   withScriptjs,
   withGoogleMap,
@@ -26,6 +26,8 @@ const {
 } = require("react-google-maps");
 
 const { MarkerWithLabel } = require("react-google-maps/lib/components/addons/MarkerWithLabel");
+
+const { InfoBox } = require("react-google-maps/lib/components/addons/InfoBox");
 
 let bounds;
 
@@ -46,6 +48,13 @@ export const MapWithDirectionsRenderer = compose(
   }),
   withScriptjs,
   withGoogleMap,
+  withStateHandlers(() => ({
+    isOpen: false,
+  }), {
+    onToggleOpen: ({ isOpen }) => () => ({
+      isOpen: !isOpen,
+    })
+  }),
   lifecycle({
     componentDidMount() {
       this.reRender(this.props);
@@ -181,12 +190,25 @@ export const MapWithDirectionsRenderer = compose(
             (<Marker
               key={routeKey}
               position={{ lat: route.dumpingGround.latitude, lng: route.dumpingGround.longitude }}
+              onClick={props.onToggleOpen}
               // icon={{
               //   url: (props.availWidth < 479 ? garbagePickup : garbagePickup),
               //   scaledSize: (props.availWidth < 479 ? new window.google.maps.Size(24, 24) : new window.google.maps.Size(32, 32)),
               //   anchor: (props.availWidth < 479 ? new window.google.maps.Point(15, 15) : new window.google.maps.Point(15, 15))
               // }}
-             />)
+             >
+             {props.isOpen && <InfoBox
+                onCloseClick={props.onToggleOpen}
+                options={{ closeBoxURL: ``, enableEventPropagation: true }}
+                >
+                   <div style={{ backgroundColor: `white`, opacity: 0.75, padding: `12px` }}>
+                     <div style={{ fontSize: `16px`, fontColor: `#08233B` }}>
+                       Test
+                     </div>
+                   </div>
+              </InfoBox>}
+             </Marker>
+           )
           )
         }
 
