@@ -22,7 +22,8 @@ const {
   GoogleMap,
   DirectionsRenderer,
   Marker,
-  OverlayView
+  OverlayView,
+  Polyline
 } = require("react-google-maps");
 
 const { MarkerWithLabel } = require("react-google-maps/lib/components/addons/MarkerWithLabel");
@@ -259,6 +260,7 @@ export const MapWithDirectionsRenderer = compose(
 
       }
 
+    
 
         {/*<MarkerWithLabel
           position={{ lat: props.destination.latLng.lat, lng: props.destination.latLng.lng }}

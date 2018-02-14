@@ -186,13 +186,13 @@ class Tracker extends Component {
     const socket = io.connect(SOCKET_URL);
     socket.on('customer_list', (msg) => {
       console.log(msg);
-      var lat = jp.query(msg, '$..[2]');
-      var long = jp.query(msg, '$..[2]');
+      // var lat = jp.query(msg, '$..[2]');
+      // var long = jp.query(msg, '$..[2]');
       // (msg).forEach(item => {
 
       // });
-      console.log(lat);
-      console.log(long);
+      // console.log(lat);
+      // console.log(long);
 
     });
     // commonApi(
