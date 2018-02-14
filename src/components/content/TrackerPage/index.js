@@ -8,37 +8,18 @@ import _ from "lodash";
 import Loader from "../Loader";
 import $ from "jquery";
 import jp from "jsonpath";
-import {
-  SocketProvider,
-  socketConnect
-} from 'socket.io-react';
+import {SocketProvider, socketConnect} from 'socket.io-react';
 import io from 'socket.io-client';
+
 const SOCKET_URL = "ws://172.16.4.128:3005/location";
+const socket = io.connect(SOCKET_URL);
 
 var appData = {
   userLocation:{
     address: null,
     latLng: { lat: 12.9226, lng: 77.6174, accuracy: 0 }
   },
-  vehicleLocations:
-  [
-    {
-      address: null,
-      latLng: { lat: 12.9226, lng: 77.6174, accuracy: 0 }
-    },
-    {
-      address: null,
-      latLng: { lat: 12.9230, lng: 77.6178, accuracy: 0 }
-    },
-    {
-      address: null,
-      latLng: { lat: 12.9234, lng: 77.6182, accuracy: 0 }
-    },
-    {
-      address: null,
-      latLng: { lat: 12.9238, lng: 77.6186, accuracy: 0 }
-    }
-  ],
+  vehicleLocations: [],
   vehicleIconUrl:
     "https://s3.amazonaws.com/locus-assets/vehicle-icons/Car1.svg",
   source: {
@@ -157,9 +138,9 @@ class Tracker extends Component {
       //Make server call to fetch initial and tracking data
       initialize();
       //And it will call every refreshSeconds
-      timerObject = setInterval(() => {
-        initialize();
-      }, refreshSeconds);
+      // timerObject = setInterval(() => {
+      //   initialize();
+      // }, refreshSeconds);
     }
 
     window.addEventListener("resize", () => {
@@ -168,12 +149,12 @@ class Tracker extends Component {
       });
     });
 
-    let updatePage = () => {
-      if (self.fCon) $(self.fCon).animate({ scrollTop: 0 }, 0);
-      else setTimeout(() => updatePage(), 100);
-    };
+    // let updatePage = () => {
+    //   if (self.fCon) $(self.fCon).animate({ scrollTop: 0 }, 0);
+    //   else setTimeout(() => updatePage(), 100);
+    // };
 
-    updatePage();
+    // updatePage();
   }
 
   componentWillUnmount() {
@@ -183,47 +164,37 @@ class Tracker extends Component {
   initialize = () => {
     let self = this;
     let { state } = self;
-    const socket = io.connect(SOCKET_URL);
     socket.on('customer_list', (msg) => {
       console.log(msg);
-      // var lat = jp.query(msg, '$..[2]');
-      // var long = jp.query(msg, '$..[2]');
-      // (msg).forEach(item => {
 
-      // });
-      // console.log(lat);
-      // console.log(long);
-
+      if(!_.isEmpty(msg)) {
+        msg = JSON.parse(msg);
+        if(appData.vehicleLocations) {
+          if(!_.find(appData.vehicleLocations, {'vehicleNo': msg["vehicleNo"]})) {
+            let vehicleLocation = {};
+            vehicleLocation.vehicleNo= msg["vehicleNo"];
+            vehicleLocation.latLng={};
+            vehicleLocation.latLng.lat= msg.coords["latitude"];
+            vehicleLocation.latLng.lng= msg.coords["longitude"];
+            vehicleLocation.latLng.accuracy= msg.coords["accuracy"];
+            vehicleLocation.address=null;
+            appData.vehicleLocations.push(vehicleLocation);
+          }
+          else {
+            appData.vehicleLocations.map((item) => {
+              if(item.vehicleNo && item.vehicleNo===msg["vehicleNo"]) {
+                item.latLng={};
+                item.latLng.lat= msg.coords["latitude"];
+                item.latLng.lng= msg.coords["longitude"];
+                item.latLng.accuracy= msg.coords["accuracy"];
+                item.address=null;
+              }
+            })
+          }
+        }
+      }
+      console.log(appData.vehicleLocations);
     });
-    // commonApi(
-    //   "get",
-    //   "https://api.locus.sh/v1/trip/" + self.props.match.params.uid + "/info"
-    // )
-    //   .then(res => {
-    //     if (res.data && res.data.settings) {
-    //       if (res.data.settings.title)
-    //         window.document.title = res.data.settings.title;
-    //       if (res.data.settings.favicon)
-    //         $("link[rel='shortcut icon']").attr(
-    //           "href",
-    //           res.data.settings.favicon
-    //         );
-    //     }
-    //     self.setState({
-    //       ...state,
-    //       isValidId: res.data && Object.keys(res.data).length,
-    //       appData: res.data && Object.keys(res.data).length ? res.data : {},
-    //       isLoading: false
-    //     });
-    //   })
-    //   .catch(err => {
-    //     console.log(err);
-    //     // self.setState({
-    //     //   isValidId: false,
-    //     //   isLoading: false
-    //     // });
-    //   });
-    //
     self.setState({
       ...state,
       appData: appData,
