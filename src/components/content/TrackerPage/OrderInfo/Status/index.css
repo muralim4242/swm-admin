@@ -1,0 +1,59 @@
+.statusAddressSection {
+    line-height: 20px;
+    padding-top: 15px;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+    text-align: left;
+}
+
+.order-details-amount-text {
+    padding-top: 12px;
+}
+
+.order-details-amount {
+	color: #00c853;
+	font-size: 14px;
+}
+
+.order-details-collapsed {
+	display: block;
+	padding-bottom: 34px;
+    color: #383f47;
+}
+
+.order-pin-box {
+    border-radius: 2px;
+    background-color: #e0e0e0;
+    min-width: 3rem;
+    padding: 0 6px;
+    margin-left: 14px;
+    text-align: center;
+    font-size: 12px;
+    line-height: 22px;
+    height: 22px;
+    color: #383f47;
+    float: right;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    margin-top: 14px;
+}
+
+.order-status-box {
+    line-height: 50px;
+    padding: 0 !important;
+    margin-top: -12px;
+}
+
+.arrow-key {
+    margin-right: -24px;
+    opacity: 0.7;
+}
+
+.divider-margin {
+    margin-top: 15px;
+    margin-bottom: -8px;
+}
+
+.pm {
+    font-size: 20px;
+}
