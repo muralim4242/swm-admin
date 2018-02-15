@@ -135,6 +135,7 @@ export const MapWithDirectionsRenderer = compose(
     }
   })
 )(props => {
+  console.log(props.vehicleLocations);
   return (<div>
     { (props.eta != -1 && props.eta <= 10)
       ?
@@ -186,6 +187,28 @@ export const MapWithDirectionsRenderer = compose(
             )
           })
         }
+
+        {props.routes && props.routes.map((route,routeKey)=>
+          {
+            let options={strokeColor: 'red',strokeWeight: 4}
+            let collectionPoints=route.collectionPoints.map((collectionPoint)=>
+            {
+              return {lat:collectionPoint.latitude,lng:collectionPoint.longitude}
+            })
+
+            if (routeKey==1) {
+              options={strokeColor: 'green',strokeWeight: 6}
+            } else if(routeKey==2){
+              options={strokeColor: 'blue',strokeWeight: 6}
+            }
+
+
+
+            return (<Polyline key={routeKey} path={[...collectionPoints,{lat:route.dumpingGround.latitude,lng:route.dumpingGround.longitude}]} options={options}/>)
+          })
+        }
+
+
 
         {props.routes && props.routes.map((route,routeKey)=>
             (<Marker
@@ -260,7 +283,7 @@ export const MapWithDirectionsRenderer = compose(
 
       }
 
-    
+
 
         {/*<MarkerWithLabel
           position={{ lat: props.destination.latLng.lat, lng: props.destination.latLng.lng }}
