@@ -11,7 +11,9 @@ import jp from "jsonpath";
 import {SocketProvider, socketConnect} from 'socket.io-react';
 import io from 'socket.io-client';
 
-const SOCKET_URL = process.env.SOCKETIO_SERVER || "ws://172.16.4.128:3005/location";
+// NB: The environment variable MUST be prefixed with REACT_APP_ to get passed through properly
+// See https://github.com/facebook/create-react-app/issues/102
+const SOCKET_URL = process.env["REACT_APP_SOCKETIO_SERVER"] || "ws://172.16.4.128:3005/location";
 const socket = io.connect(SOCKET_URL);
 
 var appData = {
