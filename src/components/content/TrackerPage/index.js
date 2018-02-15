@@ -11,7 +11,7 @@ import jp from "jsonpath";
 import {SocketProvider, socketConnect} from 'socket.io-react';
 import io from 'socket.io-client';
 
-const SOCKET_URL = "ws://172.16.4.128:3005/location";
+const SOCKET_URL = process.env.SOCKETIO_SERVER || "ws://172.16.4.128:3005/location";
 const socket = io.connect(SOCKET_URL);
 
 var appData = {
