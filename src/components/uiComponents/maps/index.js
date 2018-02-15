@@ -190,16 +190,16 @@ export const MapWithDirectionsRenderer = compose(
 
         {props.routes && props.routes.map((route,routeKey)=>
           {
-            let options={strokeColor: 'red',strokeWeight: 4}
+            let options={strokeColor: 'red',strokeWeight: 3}
             let collectionPoints=route.collectionPoints.map((collectionPoint)=>
             {
               return {lat:collectionPoint.latitude,lng:collectionPoint.longitude}
             })
 
             if (routeKey==1) {
-              options={strokeColor: 'green',strokeWeight: 6}
+              options={strokeColor: 'green',strokeWeight: 3}
             } else if(routeKey==2){
-              options={strokeColor: 'blue',strokeWeight: 6}
+              options={strokeColor: 'blue',strokeWeight: 3}
             }
 
 

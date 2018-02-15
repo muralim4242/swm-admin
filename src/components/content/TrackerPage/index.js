@@ -16,7 +16,7 @@ import io from 'socket.io-client';
 const SOCKET_URL = process.env["REACT_APP_SOCKETIO_SERVER"] || "ws://172.16.4.128:3005/location";
 const socket = io.connect(SOCKET_URL);
 
-var appData = {
+var appDataInitData = {
   userLocation:{
     address: null,
     latLng: { lat: 12.9226, lng: 77.6174, accuracy: 0 }
@@ -219,10 +219,10 @@ class Tracker extends Component {
     super(props);
     this.state = {
       isValidId: true,
+      isLoading: false,
       online: window.navigator.onLine,
-      appData: {},
+      appData: appDataInitData,
       refreshSeconds: 30000,
-      isLoading: true,
       availWidth: window.screen.availWidth
     };
   }
@@ -245,6 +245,7 @@ class Tracker extends Component {
   initialize = () => {
     let self = this;
     let { state } = self;
+    let {appData} =this.state;
     socket.on('customer_list', (msg) => {
     console.log(msg);
 
@@ -277,9 +278,7 @@ class Tracker extends Component {
       console.log(appData.vehicleLocations);
       self.setState({
         ...state,
-        appData: appData,
-        isValidId: true,
-        isLoading: false
+        appData: appData
       });
     });
 
