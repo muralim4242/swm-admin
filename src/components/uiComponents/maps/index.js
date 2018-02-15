@@ -23,7 +23,8 @@ const {
   DirectionsRenderer,
   Marker,
   OverlayView,
-  Polyline
+  Polyline,
+  TrafficLayer
 } = require("react-google-maps");
 
 const { MarkerWithLabel } = require("react-google-maps/lib/components/addons/MarkerWithLabel");
@@ -68,7 +69,7 @@ export const MapWithDirectionsRenderer = compose(
     },
 
     reRender(props) {
-      if(props.source && props.destination && props.userLocation) {
+      if(props.userLocation) {
         const DirectionsService = new window.google.maps.DirectionsService();
         bounds = new window.google.maps.LatLngBounds();
         let count = 2; //1: if don't want to show pickup
@@ -91,8 +92,8 @@ export const MapWithDirectionsRenderer = compose(
         }
 
         DirectionsService.route({
-          origin: new window.google.maps.LatLng(props.userLocation.latLng.lat, props.userLocation.latLng.lng),
-          destination: new window.google.maps.LatLng(props.destination.latLng.lat, props.destination.latLng.lng),
+          origin: new window.google.maps.LatLng(12.9188752, 77.6701266),
+          destination: new window.google.maps.LatLng(12.9288091, 77.5858991999999),
           travelMode: window.google.maps.TravelMode.DRIVING,
           waypoints: waypts,
           optimizeWaypoints: true
@@ -101,7 +102,7 @@ export const MapWithDirectionsRenderer = compose(
             this.setState({
               directions: result,
               duration: result.routes[0].legs[0].duration.text.split(' ')[0],
-              heading: window.google.maps.geometry.spherical.computeHeading(new window.google.maps.LatLng(props.userLocation.latLng.lat, props.userLocation.latLng.lng), new window.google.maps.LatLng(props.destination.latLng.lat, props.destination.latLng.lng)),
+              heading: window.google.maps.geometry.spherical.computeHeading(new window.google.maps.LatLng(12.9188752, 77.6701266), new window.google.maps.LatLng(12.9288091, 77.5858991999999)),
               waypoints: waypts
             });
 
@@ -115,8 +116,8 @@ export const MapWithDirectionsRenderer = compose(
         //DO THIS ONLY IF WE NEED TO SHOW PICKUP LOCATION BASED ON API CONFIGURATION
         if(true) {
           DirectionsService.route({
-            origin: new window.google.maps.LatLng(props.source.latLng.lat, props.source.latLng.lng),
-            destination: new window.google.maps.LatLng(props.userLocation.latLng.lat, props.userLocation.latLng.lng),
+            origin: new window.google.maps.LatLng(12.9188752, 77.6701266),
+            destination: new window.google.maps.LatLng(12.9288091, 77.5858991999999),
             travelMode: window.google.maps.TravelMode.DRIVING,
           }, (result, status) => {
             if (status === window.google.maps.DirectionsStatus.OK) {
@@ -172,6 +173,7 @@ export const MapWithDirectionsRenderer = compose(
           ]}
         }
       >
+        <TrafficLayer autoUpdate />
         {props.routes && props.routes.map((route,routeKey)=>
           {
             return route.collectionPoints.map((marker,markerKey)=>
@@ -221,7 +223,7 @@ export const MapWithDirectionsRenderer = compose(
               //   anchor: (props.availWidth < 479 ? new window.google.maps.Point(15, 15) : new window.google.maps.Point(15, 15))
               // }}
              >
-             {props.isOpen && <InfoBox
+             {/*props.isOpen && <InfoBox
                 onCloseClick={props.onToggleOpen}
                 options={{ closeBoxURL: ``, enableEventPropagation: true }}
                 >
@@ -230,13 +232,13 @@ export const MapWithDirectionsRenderer = compose(
                        Test
                      </div>
                    </div>
-              </InfoBox>}
+              </InfoBox>*/}
              </Marker>
            )
           )
         }
 
-        {props.showLocationTrail && props.directions && ["COMPLETED", "CANCELLED"].indexOf(props.tripStatus) == -1 && <DirectionsRenderer
+        {/*props.showLocationTrail && props.directions && ["COMPLETED", "CANCELLED"].indexOf(props.tripStatus) == -1 && <DirectionsRenderer
                                 directions={props.directions}
                                 options={{
                                   preserveViewport: true,
@@ -254,7 +256,7 @@ export const MapWithDirectionsRenderer = compose(
                                         repeat: '1px'
                                     }]
                                   }
-                                }}/>}
+                                }}/>*/}
         {props.vehicleLocations && props.vehicleLocations.map((marker,markerKey)=>(
           <Marker
           key={markerKey}

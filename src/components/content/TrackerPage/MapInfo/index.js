@@ -8,8 +8,6 @@ class MapsInfo extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			source: null,
-			destination: null,
 			vehicleLocations: [],
 			userLocation:{},
 			eta: 9,
@@ -23,10 +21,8 @@ class MapsInfo extends Component {
 	}
 
 	initializeMap(props) {
-		if(props.source && props.destination && props.vehicleLocations) {
+		if(props.vehicleLocations) {
 			this.setState({
-				source: props.source,
-				destination: props.destination,
 				vehicleLocations: props.vehicleLocations,
 				routes: props.routes,
 				userLocation:props.userLocation
@@ -41,17 +37,15 @@ class MapsInfo extends Component {
 	}
 
 	render() {
-		const { source, destination, vehicleLocations, eta,routes,userLocation } = this.state;
+		const {vehicleLocations, eta,routes,userLocation } = this.state;
 		const { refresh, t, availWidth } = this.props;
 		return (
 			<div className="map-box">
-				<a className="refresh-btn btn-floating btn-large waves-effect waves-light lightBlack" href="javascript:void(0)" onClick={refresh}>
+				{/*<a className="refresh-btn btn-floating btn-large waves-effect waves-light lightBlack" href="javascript:void(0)" onClick={refresh}>
 					<i className="material-icons">refresh</i>
-				</a>
+				</a>*/}
 				<MapWithDirectionsRenderer
 					availWidth={availWidth}
-					source={source}
-					destination={destination}
 					vehicleLocations={vehicleLocations}
 					eta={eta}
 					routes={routes}
