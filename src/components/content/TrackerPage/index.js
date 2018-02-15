@@ -21,7 +21,7 @@ var appData = {
   },
   vehicleLocations: [],
   vehicleIconUrl:
-    "https://s3.amazonaws.com/locus-assets/vehicle-icons/Car1.svg",
+    "",
   source: {
     address:
       "UTPL Campus, Warehouse No.1, survey no.35,38,39, IDA Block A, Mindi Village, Gajuwaka, Visakhapatnam 530012",
@@ -226,35 +226,14 @@ class Tracker extends Component {
   }
 
   componentDidMount() {
-    let uId = this.props.match.params.uid;
     let { initialize } = this;
-    let { refreshSeconds } = this.state;
     let self = this;
-    if (!uId) {
-      this.setState({
-        isValidId: false
-      });
-    } else {
-      //Make server call to fetch initial and tracking data
-      initialize();
-      //And it will call every refreshSeconds
-      // timerObject = setInterval(() => {
-      //   initialize();
-      // }, refreshSeconds);
-    }
-
+    initialize();
     window.addEventListener("resize", () => {
       self.setState({
         availWidth: window.screen.availWidth
       });
     });
-
-    // let updatePage = () => {
-    //   if (self.fCon) $(self.fCon).animate({ scrollTop: 0 }, 0);
-    //   else setTimeout(() => updatePage(), 100);
-    // };
-
-    // updatePage();
   }
 
   componentWillUnmount() {
@@ -265,7 +244,7 @@ class Tracker extends Component {
     let self = this;
     let { state } = self;
     socket.on('customer_list', (msg) => {
-      console.log(msg);
+    console.log(msg);
 
       if(!_.isEmpty(msg)) {
         msg = JSON.parse(msg);

@@ -8,7 +8,7 @@ const Main = () => {
     return (
       <main style={{"marginBottom": "50px"}}>
         <Switch>
-          <Route exact path={base+"/:uid?"} component={Tracker}/>
+          <Route exact path={base+""} component={Tracker}/>
         </Switch>
       </main>
      )
